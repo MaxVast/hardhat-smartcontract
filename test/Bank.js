@@ -22,17 +22,6 @@ describe("Bank Contract", function () {
             expect(contractBalanceAfterDeposit).to.equal(contractBalanceBeforeDeposit.add(_amount));
         })
 
-        it("Should not allow withdrawal of an amount if it is not the owner", async () => {
-            let _amount = ethers.utils.parseUnits("1");
-            await bankContract.connect(owner).deposit({value: _amount});
-
-            await expect(bankContract.connect(addr1).withdraw(_amount))
-                .to.be.revertedWithCustomError(
-                bankContract,
-                "OwnableUnauthorizedAccount")
-                .withArgs(addr1.address);
-        })
-
         it("Should allow the owner to deposit funds and emit a Deposit event", async () => {
             let _amount = ethers.utils.parseUnits("1");
             await expect(bankContract.connect(owner).deposit({value: _amount}))
@@ -68,6 +57,16 @@ describe("Bank Contract", function () {
             await expect(bankContract.connect(owner).withdraw(_amountForWithdraw))
                 .to.emit(bankContract, 'Withdraw')
                 .withArgs(owner.address, _amountForWithdraw);
+        })
+
+        it("Should not allow withdrawal of an amount if it is not the owner", async () => {
+            let _amount = ethers.utils.parseUnits("1");
+            await bankContract.connect(owner).deposit({value: _amount});
+            await expect(bankContract.connect(addr1).withdraw(_amount))
+                .to.be.revertedWithCustomError(
+                bankContract,
+                "OwnableUnauthorizedAccount")
+                .withArgs(addr1.address);
         })
 
         it("Should not allow withdrawal of an amount greater than the bank balance", async () => {
