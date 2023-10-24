@@ -22,6 +22,17 @@ describe("Bank Contract", function () {
             expect(contractBalanceAfterDeposit).to.equal(contractBalanceBeforeDeposit.add(_amount));
         })
 
+        it("Should not allow withdrawal of an amount if it is not the owner", async () => {
+            let _amount = ethers.utils.parseUnits("1");
+            await bankContract.connect(owner).deposit({value: _amount});
+
+            await expect(bankContract.connect(addr1).withdraw(_amount))
+                .to.be.revertedWithCustomError(
+                bankContract,
+                "OwnableUnauthorizedAccount")
+                .withArgs(addr1.address);
+        })
+
         it("Should allow the owner to deposit funds and emit a Deposit event", async () => {
             let _amount = ethers.utils.parseUnits("1");
             await expect(bankContract.connect(owner).deposit({value: _amount}))
