@@ -77,7 +77,8 @@ describe("Bank Contract", function () {
             const contractBalanceAfterDeposit = await ethers.provider.getBalance(bankContract.address)
             let _amountForWithdraw = ethers.utils.parseUnits("0.5");
             await bankContract.connect(owner).withdraw(_amountForWithdraw);
-            await expect(contractBalanceAfterDeposit.sub(contractBalanceAfterDeposit));
+            const contractBalanceAfterWithdraw = await ethers.provider.getBalance(bankContract.address)
+            await expect(contractBalanceAfterWithdraw).to.equal(contractBalanceAfterDeposit.sub(_amountForWithdraw));
         })
     })
 });
