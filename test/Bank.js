@@ -12,6 +12,13 @@ describe("Bank Contract", function () {
         await bankContract.deployed();
     });
 
+    describe("Initialization deploy", () => {
+        it("Should deploy the smart contract", async () => {
+            let theOwner = await bankContract.owner()
+            assert.equal(owner.address, theOwner)
+        })
+    })
+
     describe("Deposit", () => {
         it('Should allow the owner to deposit funds and check the smart contract Balance', async function() {
             let _amount = ethers.utils.parseUnits("1");
