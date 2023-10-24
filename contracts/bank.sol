@@ -8,6 +8,8 @@ contract Bank is Ownable {
     event Deposit(address indexed _from, uint _value);
     event Withdraw(address indexed _from, uint _value);
 
+    constructor(address initialOwner) Ownable(initialOwner){ }
+
     function deposit() external payable onlyOwner {
         require(msg.value >= 0.1 ether, "not enough funds provided");
         emit Deposit(msg.sender, msg.value);
