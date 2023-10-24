@@ -15,12 +15,11 @@ describe("Bank Contract", function () {
     describe("Deposit", () => {
         it('Should allow the owner to deposit funds and check the smart contract Balance', async function() {
             let _amount = ethers.utils.parseUnits("1");
-
             const contractBalanceBeforeDeposit = await ethers.provider.getBalance(bankContract.address)
-            expect(contractBalanceBeforeDeposit === ethers.utils.parseUnits("0"));
+            expect(contractBalanceBeforeDeposit).to.equal(0)
             await bankContract.connect(owner).deposit({value: _amount});
             const contractBalanceAfterDeposit = await ethers.provider.getBalance(bankContract.address)
-            expect(contractBalanceAfterDeposit === _amount);
+            expect(contractBalanceAfterDeposit).to.equal(contractBalanceBeforeDeposit.add(_amount));
         })
 
         it("Should allow the owner to deposit funds and emit a Deposit event", async () => {
